@@ -81,9 +81,9 @@ codex mcp get cloud-guardian
 
 Choose either this registration or the plugin, so the server loads once.
 The installer also supports `--version v0.1.0` and `--install-dir /absolute/path`;
-run it with `--help` for the complete options. Windows binaries are available in
-the release assets for manual stdio configuration; the plugin launcher and
-installer currently require Bash on macOS/Linux.
+run it with `--help` for the complete options. Windows cross-builds are available
+in the release assets for development. Browser sign-in currently works on
+macOS/Linux, which are also required by the plugin launcher and installer.
 
 ## Troubleshooting
 
