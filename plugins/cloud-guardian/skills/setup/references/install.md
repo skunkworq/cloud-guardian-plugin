@@ -5,7 +5,7 @@ The package bundles skills and a stdio MCP definition. Its launcher discovers
 `https://api.cloudguard.dev` and uses `https://cloudguard.dev` for browser sign-in
 unless `CLOUD_GUARDIAN_API_URL` and `CLOUD_GUARDIAN_WEB_URL` are set.
 
-Use the repository's [installation guide](https://cloudguard.dev/docs/mcp) and
+Use the repository's [installation guide](https://github.com/skunkworq/cloud-guardian-plugin#readme) and
 the commands supported by the installed Codex version. The marketplace is
 `cloud-guardian`; the plugin selector is `cloud-guardian@cloud-guardian`.
 

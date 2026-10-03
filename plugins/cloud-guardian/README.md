@@ -39,7 +39,7 @@ codex plugin marketplace upgrade cloud-guardian
 codex plugin add cloud-guardian@cloud-guardian
 ```
 
-Read the [marketplace page](https://cloudguard.dev/plugins/cloud-guardian),
+Read the [marketplace page](https://github.com/skunkworq/cloud-guardian-plugin#readme),
 [MCP onboarding](https://cloudguard.dev/docs/mcp/auth), and
 [example workflows](https://cloudguard.dev/docs/mcp/workflows).
 Source and issues are in the public

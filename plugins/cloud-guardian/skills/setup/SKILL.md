@@ -48,10 +48,13 @@ credentials into chat.
 | Azure, Supabase, Hetzner, Vultr | Use guided setup and the current provider onboarding documentation. Existing provider tools are `cg_onboard_azure`, `cg_onboard_supabase`, `cg_onboard_hetzner`, and `cg_onboard_vultr`; inspect their schemas before supplying credentials. |
 
 `cg_onboarding_start` uses the backend's default organization: it has no
-`org_id` parameter. When several organizations are available, use the web
-wizard with the intended organization selected or a provider-specific
-onboarding tool that accepts `org_id`. Do not assume a guided session belongs
-to the organization selected in earlier read calls.
+`org_id` parameter. The web guided onboarding also omits an explicit
+organization. Selecting an organization in the web UI or an earlier read call
+does not establish the guided session's destination. Confirm that the default
+is the requested organization before using either guided path. For another
+organization, use a provider-specific MCP onboarding tool with an explicit
+`org_id`. Do not assume a manual web connector flow provides organization
+scope without verifying its requests and project-linking behavior.
 
 Provider-side setup can create service accounts, IAM roles, keys, connectors,
 or linked projects. Perform it within the account and scope the user requested.

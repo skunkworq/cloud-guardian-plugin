@@ -7,7 +7,7 @@
     "name": "Cloud Guardian",
     "url": "https://cloudguard.dev"
   },
-  "homepage": "https://cloudguard.dev/plugins/cloud-guardian",
+  "homepage": "https://github.com/skunkworq/cloud-guardian-plugin#readme",
   "repository": "https://github.com/skunkworq/cloud-guardian-plugin",
   "keywords": ["cloud", "costs", "finops", "onboarding", "mcp", "codex"],
   "extensions": {
@@ -19,7 +19,7 @@
         "developerName": "Cloud Guardian",
         "category": "Productivity",
         "capabilities": ["Interactive", "Read", "Write"],
-        "websiteURL": "https://cloudguard.dev/plugins/cloud-guardian",
+        "websiteURL": "https://github.com/skunkworq/cloud-guardian-plugin#readme",
         "logo": "./icons/logo.svg",
         "logoDark": "./icons/logo-dark.svg",
         "composerIcon": "./icons/composer.svg",

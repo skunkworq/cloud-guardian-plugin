@@ -94,8 +94,9 @@ installer currently require Bash on macOS/Linux.
   for a custom location.
 - **Signed out:** call `cg_login` and complete the browser flow.
 - **Wrong organization:** choose an organization and pass its `org_id` to scoped
-  tools. For provider onboarding across multiple organizations, use the web
-  guided setup in the selected organization.
+  tools. Both `cg_onboarding_start` and the web guided wizard use the default
+  organization. For another organization, use a provider onboarding tool that
+  accepts an explicit `org_id`.
 - **No overview UI:** ask Codex for a text cost breakdown. UI support depends
   on your host's MCP Apps capabilities.
 - **Costs are incomplete:** billing and scanner estimates are shown separately;
