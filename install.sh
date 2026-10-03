@@ -101,26 +101,41 @@ VERSION="${VERSION#"$TAG_PREFIX"}"
 VERSION="${VERSION#v}"
 [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]] || fail 'Version must be a SemVer such as 1.2.3'
 
-ASSET="cg-mcp_${PLATFORM}_${ARCH}"
+RAW_ASSET="cg-mcp_${PLATFORM}_${ARCH}"
+ASSET="$RAW_ASSET"
 BASE_URL="https://github.com/$RELEASE_REPO/releases/download/${TAG_PREFIX}${VERSION}"
 printf 'Downloading Cloud Guardian MCP %s for %s/%s\n' "$VERSION" "$PLATFORM" "$ARCH"
-download "$BASE_URL/$ASSET" "$DOWNLOAD_DIR/$ASSET"
 download "$BASE_URL/SHA256SUMS" "$DOWNLOAD_DIR/SHA256SUMS"
+COMPRESSED_COUNT="$(awk -v name="$RAW_ASSET.gz" '$2 == name || $2 == "*" name { count++ } END { print count + 0 }' "$DOWNLOAD_DIR/SHA256SUMS")"
+if [[ "$COMPRESSED_COUNT" -gt 1 ]]; then
+  fail "SHA256SUMS must contain exactly one checksum for $RAW_ASSET.gz"
+elif [[ "$COMPRESSED_COUNT" == 1 ]]; then
+  if command -v gzip >/dev/null 2>&1; then
+    ASSET="$RAW_ASSET.gz"
+  elif ! awk -v name="$RAW_ASSET" '$2 == name || $2 == "*" name { found = 1 } END { exit !found }' "$DOWNLOAD_DIR/SHA256SUMS"; then
+    fail 'gzip is required to install this compressed release'
+  fi
+fi
 EXPECTED_HASH="$(awk -v name="$ASSET" '$2 == name || $2 == "*" name { print $1; count++ } END { if (count != 1) exit 1 }' "$DOWNLOAD_DIR/SHA256SUMS")" \
   || fail "SHA256SUMS must contain exactly one checksum for $ASSET"
 [[ "$EXPECTED_HASH" =~ ^[0-9a-f]{64}$ ]] || fail 'Invalid SHA256 checksum in release'
+download "$BASE_URL/$ASSET" "$DOWNLOAD_DIR/$ASSET"
 if [[ "$HASH_COMMAND" == shasum ]]; then
   ACTUAL_HASH="$(shasum -a 256 "$DOWNLOAD_DIR/$ASSET" | awk '{print $1}')"
 else
   ACTUAL_HASH="$(sha256sum "$DOWNLOAD_DIR/$ASSET" | awk '{print $1}')"
 fi
 [[ "$ACTUAL_HASH" == "$EXPECTED_HASH" ]] || fail 'SHA256 verification failed; existing installation was preserved'
+if [[ "$ASSET" == "$RAW_ASSET.gz" ]]; then
+  gzip -dc -- "$DOWNLOAD_DIR/$ASSET" > "$DOWNLOAD_DIR/$RAW_ASSET" \
+    || fail 'gzip decompression failed; existing installation was preserved'
+fi
 
 mkdir -p -- "$INSTALL_DIR"
 INSTALL_DIR="$(cd -- "$INSTALL_DIR" && pwd -P)"
 DEST="$INSTALL_DIR/cg-mcp"
 STAGED_BINARY="$INSTALL_DIR/.cg-mcp.$$.tmp"
-install -m 0755 "$DOWNLOAD_DIR/$ASSET" "$STAGED_BINARY"
+install -m 0755 "$DOWNLOAD_DIR/$RAW_ASSET" "$STAGED_BINARY"
 mv -f -- "$STAGED_BINARY" "$DEST"
 STAGED_BINARY=''
 printf 'Installed ☁️🛡️ Cloud Guardian MCP: %s\n' "$DEST"

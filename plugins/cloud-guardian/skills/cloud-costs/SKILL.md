@@ -49,7 +49,10 @@ deployment, which is not available on production yet.
 
 Successful overview responses may be reused for 30 seconds within the same
 session and organization. Use `cg_open_overview` with `refresh: true` for an
-explicit refresh of saved observations. Request a provider scan separately
+explicit refresh of saved observations. The native `cg_overview_app` entrypoint
+can show a session snapshot up to five minutes old while updating; use the
+displayed load time and wait for the full result when freshness matters.
+Request a provider scan separately
 when the user needs new provider observations.
 
 The overview shows at most 20 ranked resources. Broaden a tool query when the

@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "cloud-guardian",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Explore cloud costs and Vercel billing in Codex, with provider onboarding, project mentions, and scoped remediation workflows.",
   "author": {
     "name": "Cloud Guardian",

@@ -93,9 +93,11 @@ After onboarding, use `cg_test_connector`, then confirm the linked projects with
 its first cost observations arrive; identify that state rather than reporting
 zero spend.
 
-The overview renders a loading state promptly and has a bounded fallback when
-the host does not supply its initial result. It reuses successful results for
-up to 30 seconds per session and organization. Set `refresh: true` on
+The native entrypoint `cg_overview_app` opens immediately and reads complete data
+through `cg_open_overview` in the background. Full results are fresh for 30 seconds
+per sign-in session and organization. The app can show a snapshot up to five
+minutes old while it refreshes; check its displayed load time. Normal token
+renewal preserves the cache and a new sign-in clears it. Set `refresh: true` on
 `cg_open_overview` when the user requests fresh saved data; this does not trigger
 a provider scan. If the tool or host fails, report the actionable error and use
 text tools rather than leaving the user waiting indefinitely.

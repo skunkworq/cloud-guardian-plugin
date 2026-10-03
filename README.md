@@ -11,10 +11,12 @@ Requires Codex with the `plugin` CLI commands and a macOS or Linux computer.
 The installer downloads a platform binary from the public
 [Cloud Guardian binary releases](https://github.com/skunkworq/homebrew-tap/releases),
 checks its SHA-256 checksum, and installs it in `~/.local/bin/cg-mcp`.
+macOS and Linux downloads are compressed to reduce transfer time; the installer
+verifies the archive before extracting it and replacing an existing binary.
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/skunkworq/cloud-guardian-plugin/main/install.sh -o /tmp/install-cloud-guardian-mcp.sh
-bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.1
+bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.2
 codex plugin marketplace add skunkworq/cloud-guardian-plugin --ref main
 codex plugin add cloud-guardian@cloud-guardian
 codex plugin list --marketplace cloud-guardian
@@ -86,18 +88,25 @@ The native overview requires an MCP Apps host that supports the relevant
 return text for other hosts. This package uses a local stdio process in Codex
 desktop/CLI; a ChatGPT web installation needs a hosted MCP service.
 
-Version 0.1.1 shows overview loading progress promptly and requests saved data
-when the host does not supply an opening result. Successful results are reused
-for up to 30 seconds within the same session and organization. **Refresh**
-bypasses that cache; it does not start a provider scan. Provider response time
-still depends on the service and account data, and failures show an actionable
-message rather than an indefinite waiting screen.
+Version 0.1.2 opens the native app immediately through `cg_overview_app` and
+loads complete saved costs in the background. A recent session snapshot stays
+visible while updating, with its load time shown. Complete results are fresh
+for 30 seconds; the app can reuse a snapshot up to five minutes old while it
+requests fresh data. Snapshots are held only in the running MCP process and
+are isolated by sign-in session and organization. Normal token renewal keeps
+the cache; a new sign-in invalidates it.
+
+Project search and pagination keep large inventories responsive. **Refresh**
+waits for a new saved-data read and does not start a provider scan. The full
+`cg_open_overview` tool still returns a complete text summary for other clients.
+Initial cost-read time depends on the API; opening the native app no longer
+waits for that read to finish.
 
 ## Update or remove
 
 ```sh
 # Update the binary, refresh the marketplace, and install the current package.
-bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.1
+bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.2
 codex plugin marketplace upgrade cloud-guardian
 codex plugin add cloud-guardian@cloud-guardian
 
@@ -123,7 +132,7 @@ codex mcp get cloud-guardian
 ```
 
 Choose either this registration or the plugin, so the server loads once.
-The installer also supports `--version v0.1.1` and `--install-dir /absolute/path`;
+The installer also supports `--version v0.1.2` and `--install-dir /absolute/path`;
 run it with `--help` for the complete options. Windows cross-builds are available
 in the release assets for development. Browser sign-in currently works on
 macOS/Linux, which are also required by the plugin launcher and installer.
@@ -145,7 +154,7 @@ macOS/Linux, which are also required by the plugin launcher and installer.
   accepts an explicit `org_id`.
 - **No overview UI:** ask Codex for a text cost breakdown. UI support depends
   on your host's MCP Apps capabilities.
-- **Still waiting on an old overview:** install runtime 0.1.1, restart the MCP
+- **Still waiting on an old overview:** install runtime 0.1.2, restart the MCP
   connection, and open a new view. The new view automatically requests saved
   data when the host omits its opening result; a provider scan is not required.
 - **Costs are incomplete:** billing and scanner estimates are shown separately;

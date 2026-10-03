@@ -6,7 +6,7 @@ This package contains the Cloud Guardian MCP connector, a `setup` skill, and a
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/skunkworq/cloud-guardian-plugin/main/install.sh -o /tmp/install-cloud-guardian-mcp.sh
-bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.1
+bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.2
 codex plugin marketplace add skunkworq/cloud-guardian-plugin --ref main
 codex plugin add cloud-guardian@cloud-guardian
 codex plugin list --marketplace cloud-guardian
@@ -31,10 +31,13 @@ or a chat tab and mention connected projects in the composer. Tools return
 text for other MCP hosts. This stdio package runs locally; ChatGPT web needs a
 hosted MCP connection. Use one Cloud Guardian connection per client.
 
-The overview shows progress immediately and requests its saved data if the host
-does not supply an opening result. Successful overview responses are reused for
-up to 30 seconds within the same session and organization; **Refresh** bypasses
-that cache. Opening the overview does not start a provider scan.
+The `cg_overview_app` sidebar/chat entrypoint opens immediately and loads complete
+saved data in the background. It reuses a recent session snapshot while updating
+and shows when that snapshot was loaded. Full reads are cached for 30 seconds;
+the app can retain a snapshot up to five minutes old during a background update.
+A new sign-in invalidates the cache; normal token renewal preserves it. Project
+search and pagination keep large inventories responsive. **Refresh** waits for a
+new saved-data read. Opening or refreshing does not start a provider scan.
 
 ## Explore Vercel costs with your existing login
 
@@ -65,7 +68,7 @@ dedicated API token. Do not copy the CLI's OAuth credentials into a backend
 connector. See [Vercel setup](skills/setup/references/vercel.md) for that separate
 workflow and the [billing API](https://vercel.com/docs/rest-api/billing/list-focus-billing-charges).
 
-To update, download and run `install.sh --version v0.1.1` again, then refresh the marketplace and
+To update, download and run `install.sh --version v0.1.2` again, then refresh the marketplace and
 reinstall the current plugin package:
 
 ```sh
