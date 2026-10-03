@@ -27,9 +27,12 @@ to the overview's resource monthly run-rate. Preserve missing costs as unknown.
 
 The overview's Vercel explorer runs only after the user supplies a team and
 chooses **Explore Vercel costs**. A billing review does not authorize persistent
-onboarding, a scan, deployment, or workload remediation. Persistent Vercel
-connectors and saved `cg_query_provider_billing` results require the next backend
-deployment, which is not available on production yet.
+onboarding, a scan, deployment, or workload remediation. For an already connected
+Vercel team, read saved billing through `cg_query_provider_billing` with explicit
+`org_id`, `provider: "vercel"`, and the matching `connector_id`; report its saved
+period and freshness. Use [Vercel setup](../setup/references/vercel.md) for a
+separately requested persistent connection. Do not trigger a fresh scan merely
+because the user asked for a cost review.
 
 ## Resolve scope and evidence
 

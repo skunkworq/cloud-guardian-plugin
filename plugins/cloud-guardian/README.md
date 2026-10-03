@@ -4,6 +4,9 @@ Bring cloud cost reviews, Vercel billing, provider onboarding, and project conte
 This package contains the Cloud Guardian MCP connector, a `setup` skill, and a
 `cloud-costs` skill. Install the local runtime and the package together.
 
+Plugin package **0.1.3** uses MCP runtime **0.1.2**. Documentation and skills can
+update independently; the runtime install below remains pinned to `v0.1.2`.
+
 ```sh
 curl -fsSL https://raw.githubusercontent.com/skunkworq/cloud-guardian-plugin/main/install.sh -o /tmp/install-cloud-guardian-mcp.sh
 bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.2
@@ -41,7 +44,7 @@ new saved-data read. Opening or refreshing does not start a provider scan.
 
 ## Explore Vercel costs with your existing login
 
-Version 0.1.1 can read Vercel billing through a current local Vercel CLI. Install
+MCP runtime 0.1.2 can read Vercel billing through a current local Vercel CLI. Install
 or update the [Vercel CLI](https://vercel.com/docs/cli), then run
 [`vercel login`](https://vercel.com/docs/cli/login) and `vercel whoami`.
 Cloud Guardian sign-in and a persistent connector are not required for this path.
@@ -61,11 +64,14 @@ For a custom CLI location, set `VERCEL_CLI_BINARY` to its absolute executable
 path in the MCP host's environment. The native overview also offers an explicit
 **Explore Vercel costs** button; it never queries Vercel automatically on opening.
 
-Persistent Vercel onboarding through `cg_onboard_vercel` is prepared for the next
-Cloud Guardian backend deployment and is **not available on the production
-backend yet**. It will use an explicit organization, a `team_...` ID, and a
-dedicated API token. Do not copy the CLI's OAuth credentials into a backend
-connector. See [Vercel setup](skills/setup/references/vercel.md) for that separate
+For a requested persistent connection, use `cg_onboard_vercel` after Cloud
+Guardian sign-in with an explicit `org_id` and a `team_...` ID. A new connector
+requires a dedicated API token; prefer `CLOUD_GUARDIAN_VERCEL_TOKEN` in the MCP
+host's environment. Matching connectors are reused without a new token;
+onboarding tests access and scheduled collection supplies saved billing and
+linked projects. Request a fresh
+team-only scan separately when needed. Do not copy the CLI's OAuth credentials
+into a backend connector. See [Vercel setup](skills/setup/references/vercel.md) for that separate
 workflow and the [billing API](https://vercel.com/docs/rest-api/billing/list-focus-billing-charges).
 
 To update, download and run `install.sh --version v0.1.2` again, then refresh the marketplace and

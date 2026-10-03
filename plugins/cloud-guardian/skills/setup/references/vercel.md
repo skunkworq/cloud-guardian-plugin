@@ -2,7 +2,7 @@
 
 ## Immediate billing through the local CLI
 
-The 0.1.1 MCP runtime provides `cg_explore_vercel_costs`. It invokes the user's
+MCP runtime 0.1.2 provides `cg_explore_vercel_costs`. It invokes the user's
 local Vercel CLI and does not require Cloud Guardian authentication, an
 organization, a connector, or a scan. Use this path for an immediate cost review.
 
@@ -44,21 +44,23 @@ executable path in its environment and restart the connection. Never read,
 print, copy, or persist the CLI's OAuth credentials. The CLI owns that login.
 Report missing CLI, expired login, or team access errors with their next step.
 
-## Persistent connector: next backend deployment
+## Persistent connector
 
-The persistent Vercel backend implementation is not deployed to production yet.
-Do not offer this as a working production path until backend availability is
-confirmed. Immediate CLI exploration above works independently of it.
+Use `cg_onboard_vercel` only when the user requests a persistent Cloud Guardian
+connection for saved inventory and billing. Immediate CLI exploration above
+works independently. Opening or refreshing the overview and querying CLI costs
+do not create connectors or trigger provider scans.
 
-Once deployed, and only when persistent onboarding is requested:
+For requested persistent onboarding:
 
 1. Verify Cloud Guardian identity and choose an explicit `org_id`.
 2. Obtain the Vercel team ID beginning `team_`; a slug is not sufficient for
    `cg_onboard_vercel`. Inspect matching connectors and reuse them.
-3. Use a dedicated [Vercel API token](https://vercel.com/kb/guide/how-do-i-use-a-vercel-api-access-token)
+3. For a new connector, use a dedicated [Vercel API token](https://vercel.com/kb/guide/how-do-i-use-a-vercel-api-access-token)
    with access to the team. Prefer `CLOUD_GUARDIAN_VERCEL_TOKEN` in the MCP host's
    environment; the optional `api_token` argument is available when necessary.
-   Do not ask the user to paste secrets into chat or copy the CLI OAuth session.
+   Reusing a matching connector does not require a new token. Do not ask the
+   user to paste secrets into chat or copy the CLI OAuth session.
 4. Call `cg_onboard_vercel` with `org_id`, `team_id`, and optional `name`.
    It reuses a matching team connector. A new connector preflights access,
    stores the dedicated token encrypted, links the team account, and tests it.

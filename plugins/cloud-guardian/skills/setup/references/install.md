@@ -1,5 +1,9 @@
 # Installation and connection
 
+Plugin package 0.1.3 uses MCP runtime 0.1.2. Package documentation and skills
+update independently of the binary; keep runtime installation pinned to
+`--version v0.1.2`.
+
 The package bundles skills and a stdio MCP definition. Its launcher discovers
 `cg-mcp` on `PATH` or at `~/.local/bin/cg-mcp`; it connects to
 `https://api.cloudguard.dev` and uses `https://cloudguard.dev` for browser sign-in
@@ -55,10 +59,10 @@ environment. The launcher falls back to `~/.local/bin` when a desktop app's
 host supports MCP Apps and the OpenAI MCP extensions. Successful tools/list
 does not imply support for every native host surface.
 
-Version 0.1.2 adds immediate native opens, session snapshot updates, and paginated project search. Vercel CLI billing exploration remains available.
+MCP runtime 0.1.2 adds immediate native opens, session snapshot updates, and paginated project search. Vercel CLI billing exploration remains available.
 Restart the MCP connection after replacing the binary so an old process or
 embedded view is not still in use. A current local Vercel CLI and `vercel login`
 are required for `cg_explore_vercel_costs`; Cloud Guardian login is not required
 for that tool. An optional `VERCEL_CLI_BINARY` must be an absolute executable
-path. Read [Vercel setup](vercel.md) for CLI checks and the separate upcoming
+path. Read [Vercel setup](vercel.md) for CLI checks and the separate requested
 persistent connector path.

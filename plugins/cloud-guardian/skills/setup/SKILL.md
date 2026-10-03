@@ -25,9 +25,11 @@ explicit team slug or ID. This path requires no Cloud Guardian login,
 organization, persistent connector, or provider scan. Do not route a Vercel-only
 request through the Cloud Guardian sign-in steps below.
 
-Persistent Vercel onboarding is a separate requested action. Its backend support
-is prepared for the next deployment and is not deployed to production yet.
-Do not attempt to create a Vercel connector there until support is confirmed.
+Persistent Vercel onboarding is a separate requested action. Follow
+[Vercel setup](references/vercel.md) with Cloud Guardian sign-in, an explicit
+`org_id`, a `team_...` team ID, and a dedicated API token for a new connector.
+Reuse existing matching connectors without requesting a new token. Do not create a
+persistent connector or request a provider scan just to review CLI billing.
 
 ## Sign in and choose the organization
 
@@ -57,7 +59,7 @@ credentials into chat.
 | GCP | `cg_onboarding_start` with `provider="gcp"` and the requested `project_id`; provide the returned OAuth link and poll `cg_onboarding_status`. `cg_onboard_gcp_project` is the alternative when local `gcloud` provisioning was requested. |
 | DigitalOcean | `cg_onboarding_start` with `provider="digitalocean"`; provide its OAuth link and poll `cg_onboarding_status`. |
 | Neon | `cg_onboard_neon` with `org_id`, omitting `api_key` for the supported browser OAuth flow. |
-| Vercel | Use `cg_explore_vercel_costs` for immediate read-only billing with local CLI login. Persistent `cg_onboard_vercel` requires the next backend deployment; follow [Vercel setup](references/vercel.md) only when it is supported and requested. |
+| Vercel | Use `cg_explore_vercel_costs` for immediate read-only billing with local CLI login. For a requested persistent connection, use `cg_onboard_vercel` with explicit `org_id`, `team_id`, and a dedicated API token for a new connector; follow [Vercel setup](references/vercel.md). |
 | Azure, Supabase, Hetzner, Vultr | Use guided setup and the current provider onboarding documentation. Existing provider tools are `cg_onboard_azure`, `cg_onboard_supabase`, `cg_onboard_hetzner`, and `cg_onboard_vultr`; inspect their schemas before supplying credentials. |
 
 `cg_onboarding_start` uses the backend's default organization: it has no

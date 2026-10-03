@@ -5,6 +5,10 @@ billing, and project context into Codex. The plugin bundles the local `cg-mcp`
 server with two skills: `setup` for sign-in and onboarding, and `cloud-costs`
 for investigating spend with the right account, period, and project scope.
 
+Plugin package **0.1.3** uses MCP runtime **0.1.2**. Package documentation and
+skills can update independently of the binary; the commands below pin the
+runtime explicitly.
+
 ## Install
 
 Requires Codex with the `plugin` CLI commands and a macOS or Linux computer.
@@ -58,11 +62,14 @@ you enter a team. It never requests Vercel costs automatically on opening.
 If the desktop host cannot find the CLI, set `VERCEL_CLI_BINARY` to its absolute
 executable path in the MCP host's environment and restart the connection.
 
-Persistent Vercel onboarding through `cg_onboard_vercel` is prepared for the next
-Cloud Guardian backend deployment and **is not deployed to production yet**.
-That separate workflow will use an explicit organization, a `team_...` ID, and
-a dedicated API token. Keep the CLI's OAuth credentials under the CLI's control;
-do not copy them into a saved connector. See the packaged
+For a requested persistent Vercel connection, sign in to Cloud Guardian and
+call `cg_onboard_vercel` with an explicit `org_id` and a `team_...` team ID.
+For a new connector, supply a dedicated API token through
+`CLOUD_GUARDIAN_VERCEL_TOKEN` or the optional `api_token` parameter. Matching
+team connectors are reused without requiring a new token. Onboarding tests
+access; scheduled collection supplies saved billing and linked projects. Request
+a fresh team-only scan separately when needed. Keep the CLI's OAuth credentials
+under the CLI's control; do not copy them into a saved connector. See the packaged
 [Vercel setup guide](plugins/cloud-guardian/skills/setup/references/vercel.md)
 and the [billing API reference](https://vercel.com/docs/rest-api/billing/list-focus-billing-charges).
 
@@ -88,7 +95,7 @@ The native overview requires an MCP Apps host that supports the relevant
 return text for other hosts. This package uses a local stdio process in Codex
 desktop/CLI; a ChatGPT web installation needs a hosted MCP service.
 
-Version 0.1.2 opens the native app immediately through `cg_overview_app` and
+MCP runtime 0.1.2 opens the native app immediately through `cg_overview_app` and
 loads complete saved costs in the background. A recent session snapshot stays
 visible while updating, with its load time shown. Complete results are fresh
 for 30 seconds; the app can reuse a snapshot up to five minutes old while it
@@ -127,7 +134,7 @@ that file separately if you want to clear the saved sign-in on this computer.
 For a host that does not support plugins, use the same binary directly:
 
 ```sh
-bash /tmp/install-cloud-guardian-mcp.sh --register-codex
+bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.2 --register-codex
 codex mcp get cloud-guardian
 ```
 
@@ -172,17 +179,25 @@ credentials, private configuration, and compiled binaries are not part of the
 plugin repository. The MCP binary is distributed separately through the public
 Homebrew tap releases with tags `cg-mcp-v<version>`.
 
-Maintainers work in the private Cloud Guardian source repo. To prepare updates:
+Maintainers work in the private Cloud Guardian source repo. Plugin package and
+MCP runtime versions advance independently. Package 0.1.3 uses runtime 0.1.2;
+keep installation examples pinned to `--version v0.1.2` until a new runtime is
+released and verified. Documentation or skill changes can bump the package
+without rebuilding or republishing the binary.
+
+To prepare a package export and, when runtime code changes, binary assets:
 
 ```sh
-# In the private source checkout:
+# In the private source checkout; only build for a runtime release:
 scripts/build-mcp-release.sh /tmp/cloud-guardian-mcp-release
 scripts/export-codex-plugin.sh /tmp/cloud-guardian-plugin-export
 ```
 
-Review the export inventory, commit the exported files to the public plugin repo,
-and publish the MCP assets with `SHA256SUMS` under the matching release tag. Bump
-both plugin manifests together when package contents change. The dispatch-only
+Review the export inventory and commit the exported files to the public plugin
+repo. For a runtime release, publish its MCP assets with `SHA256SUMS` under the
+tag matching the runtime version, such as `cg-mcp-v0.1.2`. Bump both plugin
+manifests together when package contents change and record the runtime pin in
+the installation guides. The dispatch-only
 MCP release workflow always produces build artifacts; optional cross-repository
 publication needs an `MCP_RELEASE_TOKEN` with contents-write access to the binary
 distribution repo. Do not add tokens to the plugin package.
