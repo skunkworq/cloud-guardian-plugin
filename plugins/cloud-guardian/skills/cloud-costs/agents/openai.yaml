@@ -1,0 +1,4 @@
+interface:
+  display_name: "💸 Cloud Guardian cost review"
+  short_description: "Explain cloud spend and prepare scoped fixes"
+  default_prompt: "Use $cloud-guardian:cloud-costs to review my Cloud Guardian projects, explain the largest costs and changes with freshness and pricing coverage, and prepare only the remediation actions I requested."

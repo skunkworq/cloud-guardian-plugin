@@ -1,0 +1,20 @@
+{
+  "name": "cloud-guardian",
+  "interface": {
+    "displayName": "Cloud Guardian"
+  },
+  "plugins": [
+    {
+      "name": "cloud-guardian",
+      "source": {
+        "source": "local",
+        "path": "./plugins/cloud-guardian"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

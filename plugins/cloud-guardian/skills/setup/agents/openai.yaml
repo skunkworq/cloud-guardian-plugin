@@ -1,0 +1,4 @@
+interface:
+  display_name: "🛡️☁️ Cloud Guardian setup"
+  short_description: "Connect Cloud Guardian and cloud accounts"
+  default_prompt: "Use $cloud-guardian:setup to install or reconnect Cloud Guardian, verify my signed-in organization, onboard the cloud account I requested, check connector health, and open its cloud cost overview."

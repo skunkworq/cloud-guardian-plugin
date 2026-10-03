@@ -1,0 +1,34 @@
+{
+  "name": "cloud-guardian",
+  "version": "0.1.0",
+  "description": "Connect Cloud Guardian to Codex for cloud onboarding, cost investigation, project mentions, and scoped remediation workflows.",
+  "author": {
+    "name": "Cloud Guardian",
+    "url": "https://cloudguard.dev"
+  },
+  "homepage": "https://cloudguard.dev/plugins/cloud-guardian",
+  "repository": "https://github.com/skunkworq/cloud-guardian-plugin",
+  "keywords": ["cloud", "costs", "finops", "onboarding", "mcp", "codex"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "🛡️☁️ Cloud Guardian",
+    "shortDescription": "Cloud costs in your chat",
+    "longDescription": "Sign in to Cloud Guardian, connect cloud accounts, inspect monthly cost estimates, open the native cost overview, and reference connected projects in chat. Bundled skills guide account onboarding and evidence-based cost reviews. Cloud changes use the existing scoped remediation tools.",
+    "developerName": "Cloud Guardian",
+    "category": "Productivity",
+    "capabilities": ["Interactive", "Read", "Write"],
+    "websiteURL": "https://cloudguard.dev/plugins/cloud-guardian",
+    "logo": "./icons/logo.svg",
+    "logoDark": "./icons/logo-dark.svg",
+    "composerIcon": "./icons/composer.svg",
+    "composerIconDark": "./icons/composer-dark.svg",
+    "brandColor": "#2563EB",
+    "brandColorDark": "#60A5FA",
+    "defaultPrompt": [
+      "Set up Cloud Guardian and connect my cloud account.",
+      "Open my cloud cost overview and explain the largest costs.",
+      "Review this project's costs and prepare a remediation plan."
+    ]
+  }
+}

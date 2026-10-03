@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-label="Cloud Guardian cloud and shield">
+  <rect width="256" height="256" rx="56" fill="#2563EB"/>
+  <path d="M71 159c-20 0-35-15-35-34 0-18 13-32 30-34 5-29 29-50 59-50 31 0 56 23 60 53 20 2 36 18 36 38 0 16-10 29-25 35" fill="none" stroke="#FFFFFF" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="m128 107 50 18v37c0 32-21 52-50 66-29-14-50-34-50-66v-37z" fill="#FFFFFF"/>
+  <path d="m106 163 16 16 29-33" fill="none" stroke="#2563EB" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
