@@ -14,7 +14,7 @@ the public plugin marketplace:
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/skunkworq/cloud-guardian-plugin/main/install.sh -o /tmp/install-cloud-guardian-mcp.sh
-bash /tmp/install-cloud-guardian-mcp.sh
+bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.1
 codex plugin marketplace add skunkworq/cloud-guardian-plugin --ref main
 codex plugin add cloud-guardian@cloud-guardian
 codex plugin list --marketplace cloud-guardian
@@ -38,7 +38,7 @@ codex plugin marketplace upgrade cloud-guardian
 codex plugin add cloud-guardian@cloud-guardian
 ```
 
-Update `cg-mcp` separately using the repository's `install.sh`; marketplace refresh
+Update `cg-mcp` separately using the repository's `install.sh --version v0.1.1`; marketplace refresh
 does not replace a previously installed executable. If an older Codex CLI has
 no `plugin` subcommand, use a supported Codex release or register the executable
 as a bare MCP server with the installer's `--register-codex` option. That fallback
@@ -52,3 +52,11 @@ environment. The launcher falls back to `~/.local/bin` when a desktop app's
 `PATH` omits it. If no native view appears, confirm the
 host supports MCP Apps and the OpenAI MCP extensions. Successful tools/list
 does not imply support for every native host surface.
+
+Version 0.1.1 adds bounded overview loading and direct Vercel billing exploration.
+Restart the MCP connection after replacing the binary so an old process or
+embedded view is not still in use. A current local Vercel CLI and `vercel login`
+are required for `cg_explore_vercel_costs`; Cloud Guardian login is not required
+for that tool. An optional `VERCEL_CLI_BINARY` must be an absolute executable
+path. Read [Vercel setup](vercel.md) for CLI checks and the separate upcoming
+persistent connector path.

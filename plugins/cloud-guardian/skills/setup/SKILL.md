@@ -1,6 +1,6 @@
 ---
 name: setup
-description: Set up the Cloud Guardian Codex plugin, sign in, select an organization, connect cloud accounts, verify connector health, and open the native cost overview. Use when the user asks to install, onboard, reconnect, or troubleshoot Cloud Guardian.
+description: Set up the Cloud Guardian Codex plugin, explore Vercel billing with a local CLI login, sign in to Cloud Guardian, select an organization, connect cloud accounts, verify connector health, and open the native cost overview. Use when the user asks to install, onboard, reconnect, or troubleshoot Cloud Guardian or its Vercel cost explorer.
 ---
 
 # Set up Cloud Guardian
@@ -16,6 +16,18 @@ and inspect the current client's supported commands. The plugin runs the local
 `cg-mcp` executable. Install the executable before enabling the plugin and start
 a new chat after installation. Keep one Cloud Guardian MCP connection active in
 each client so tools and native entrypoints are not duplicated.
+
+## Choose the requested setup path
+
+For immediate Vercel cost exploration, read [Vercel setup](references/vercel.md).
+Use the existing local Vercel CLI login and `cg_explore_vercel_costs` with an
+explicit team slug or ID. This path requires no Cloud Guardian login,
+organization, persistent connector, or provider scan. Do not route a Vercel-only
+request through the Cloud Guardian sign-in steps below.
+
+Persistent Vercel onboarding is a separate requested action. Its backend support
+is prepared for the next deployment and is not deployed to production yet.
+Do not attempt to create a Vercel connector there until support is confirmed.
 
 ## Sign in and choose the organization
 
@@ -45,6 +57,7 @@ credentials into chat.
 | GCP | `cg_onboarding_start` with `provider="gcp"` and the requested `project_id`; provide the returned OAuth link and poll `cg_onboarding_status`. `cg_onboard_gcp_project` is the alternative when local `gcloud` provisioning was requested. |
 | DigitalOcean | `cg_onboarding_start` with `provider="digitalocean"`; provide its OAuth link and poll `cg_onboarding_status`. |
 | Neon | `cg_onboard_neon` with `org_id`, omitting `api_key` for the supported browser OAuth flow. |
+| Vercel | Use `cg_explore_vercel_costs` for immediate read-only billing with local CLI login. Persistent `cg_onboard_vercel` requires the next backend deployment; follow [Vercel setup](references/vercel.md) only when it is supported and requested. |
 | Azure, Supabase, Hetzner, Vultr | Use guided setup and the current provider onboarding documentation. Existing provider tools are `cg_onboard_azure`, `cg_onboard_supabase`, `cg_onboard_hetzner`, and `cg_onboard_vultr`; inspect their schemas before supplying credentials. |
 
 `cg_onboarding_start` uses the backend's default organization: it has no
@@ -79,6 +92,13 @@ After onboarding, use `cg_test_connector`, then confirm the linked projects with
 `cg_open_overview` for the selected `org_id`. A connector can be healthy before
 its first cost observations arrive; identify that state rather than reporting
 zero spend.
+
+The overview renders a loading state promptly and has a bounded fallback when
+the host does not supply its initial result. It reuses successful results for
+up to 30 seconds per session and organization. Set `refresh: true` on
+`cg_open_overview` when the user requests fresh saved data; this does not trigger
+a provider scan. If the tool or host fails, report the actionable error and use
+text tools rather than leaving the user waiting indefinitely.
 
 In a compatible Codex desktop host, the user can open **Cloud cost overview**
 from the sidebar or a chat tab and mention a connected project with `@`.

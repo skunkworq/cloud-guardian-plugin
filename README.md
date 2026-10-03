@@ -1,9 +1,9 @@
 # 🛡️☁️ Cloud Guardian for Codex
 
-Cloud Guardian brings your connected cloud inventory, cost explanations, and
-project context into Codex. The plugin bundles the local `cg-mcp` server with two
-skills: `setup` for sign-in and onboarding, and `cloud-costs` for investigating
-spend with the right organization and project scope.
+Cloud Guardian brings connected cloud inventory, cost explanations, Vercel
+billing, and project context into Codex. The plugin bundles the local `cg-mcp`
+server with two skills: `setup` for sign-in and onboarding, and `cloud-costs`
+for investigating spend with the right account, period, and project scope.
 
 ## Install
 
@@ -14,7 +14,7 @@ checks its SHA-256 checksum, and installs it in `~/.local/bin/cg-mcp`.
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/skunkworq/cloud-guardian-plugin/main/install.sh -o /tmp/install-cloud-guardian-mcp.sh
-bash /tmp/install-cloud-guardian-mcp.sh
+bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.1
 codex plugin marketplace add skunkworq/cloud-guardian-plugin --ref main
 codex plugin add cloud-guardian@cloud-guardian
 codex plugin list --marketplace cloud-guardian
@@ -30,7 +30,41 @@ in Codex CLI to find **🛡️☁️ Cloud Guardian** under the **Cloud Guardian
 This is a GitHub repository marketplace; it is separate from OpenAI's public
 plugin directory review process.
 
-## First run
+## First run: explore Vercel billing
+
+For immediate Vercel costs, install or update the
+[Vercel CLI](https://vercel.com/docs/cli), run
+[`vercel login`](https://vercel.com/docs/cli/login), and check `vercel whoami`.
+This path uses your existing local Vercel login and requires no Cloud Guardian
+sign-in, organization, persistent connector, or scan.
+
+```text
+$cloud-guardian:cloud-costs
+Explore Vercel costs for team YOUR_TEAM_SLUG_OR_ID.
+Show billed and effective costs with the billing period and project/service details.
+```
+
+The `cg_explore_vercel_costs` tool takes a required `team` slug or ID. It uses
+the current billing period by default; optional paired `from_date` and `to_date`
+accept `YYYY-MM-DD` dates in America/Los_Angeles. Use the returned period and
+observation time as evidence, and keep provisional current-period charges
+separate from resource monthly run-rate. See the
+[CLI usage reference](https://vercel.com/docs/cli/usage).
+
+The native overview offers an explicit **Explore Vercel costs** button after
+you enter a team. It never requests Vercel costs automatically on opening.
+If the desktop host cannot find the CLI, set `VERCEL_CLI_BINARY` to its absolute
+executable path in the MCP host's environment and restart the connection.
+
+Persistent Vercel onboarding through `cg_onboard_vercel` is prepared for the next
+Cloud Guardian backend deployment and **is not deployed to production yet**.
+That separate workflow will use an explicit organization, a `team_...` ID, and
+a dedicated API token. Keep the CLI's OAuth credentials under the CLI's control;
+do not copy them into a saved connector. See the packaged
+[Vercel setup guide](plugins/cloud-guardian/skills/setup/references/vercel.md)
+and the [billing API reference](https://vercel.com/docs/rest-api/billing/list-focus-billing-charges).
+
+## First run: saved Cloud Guardian costs
 
 1. Ask Codex to call `cg_login`. It opens your browser and waits while you sign
    in; the tool returns your email after authentication completes.
@@ -52,11 +86,18 @@ The native overview requires an MCP Apps host that supports the relevant
 return text for other hosts. This package uses a local stdio process in Codex
 desktop/CLI; a ChatGPT web installation needs a hosted MCP service.
 
+Version 0.1.1 shows overview loading progress promptly and requests saved data
+when the host does not supply an opening result. Successful results are reused
+for up to 30 seconds within the same session and organization. **Refresh**
+bypasses that cache; it does not start a provider scan. Provider response time
+still depends on the service and account data, and failures show an actionable
+message rather than an indefinite waiting screen.
+
 ## Update or remove
 
 ```sh
 # Update the binary, refresh the marketplace, and install the current package.
-bash /tmp/install-cloud-guardian-mcp.sh
+bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.1
 codex plugin marketplace upgrade cloud-guardian
 codex plugin add cloud-guardian@cloud-guardian
 
@@ -65,7 +106,9 @@ codex plugin remove cloud-guardian@cloud-guardian
 codex plugin marketplace remove cloud-guardian
 ```
 
-Download the installer again before updating if you no longer have the file.
+Download the installer again before updating. Restart the MCP connection and
+start a new chat afterward; updating the marketplace alone does not replace a
+previously installed executable or running process.
 Removing the plugin does not delete your Cloud Guardian account, provider
 connections, or the local sign-in file at `~/.config/cloud-guardian/auth.json`. Remove
 that file separately if you want to clear the saved sign-in on this computer.
@@ -80,7 +123,7 @@ codex mcp get cloud-guardian
 ```
 
 Choose either this registration or the plugin, so the server loads once.
-The installer also supports `--version v0.1.0` and `--install-dir /absolute/path`;
+The installer also supports `--version v0.1.1` and `--install-dir /absolute/path`;
 run it with `--help` for the complete options. Windows cross-builds are available
 in the release assets for development. Browser sign-in currently works on
 macOS/Linux, which are also required by the plugin launcher and installer.
@@ -93,12 +136,18 @@ macOS/Linux, which are also required by the plugin launcher and installer.
   `~/.local/bin/cg-mcp`. Set `CLOUD_GUARDIAN_MCP_BINARY` to an absolute binary path
   for a custom location.
 - **Signed out:** call `cg_login` and complete the browser flow.
+- **Vercel billing login or CLI is unavailable:** update the Vercel CLI, run
+  `vercel login` / `vercel whoami`, and verify access to the requested team's
+  billing. Cloud Guardian login does not sign you in to Vercel.
 - **Wrong organization:** choose an organization and pass its `org_id` to scoped
   tools. Both `cg_onboarding_start` and the web guided wizard use the default
   organization. For another organization, use a provider onboarding tool that
   accepts an explicit `org_id`.
 - **No overview UI:** ask Codex for a text cost breakdown. UI support depends
   on your host's MCP Apps capabilities.
+- **Still waiting on an old overview:** install runtime 0.1.1, restart the MCP
+  connection, and open a new view. The new view automatically requests saved
+  data when the host omits its opening result; a provider scan is not required.
 - **Costs are incomplete:** billing and scanner estimates are shown separately;
   partial, stale, or unavailable results are not evidence of zero spend.
 

@@ -1,12 +1,12 @@
 # 🛡️☁️ Cloud Guardian plugin
 
-Bring cloud cost reviews, provider onboarding, and project context into Codex.
+Bring cloud cost reviews, Vercel billing, provider onboarding, and project context into Codex.
 This package contains the Cloud Guardian MCP connector, a `setup` skill, and a
 `cloud-costs` skill. Install the local runtime and the package together.
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/skunkworq/cloud-guardian-plugin/main/install.sh -o /tmp/install-cloud-guardian-mcp.sh
-bash /tmp/install-cloud-guardian-mcp.sh
+bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.1
 codex plugin marketplace add skunkworq/cloud-guardian-plugin --ref main
 codex plugin add cloud-guardian@cloud-guardian
 codex plugin list --marketplace cloud-guardian
@@ -31,13 +31,50 @@ or a chat tab and mention connected projects in the composer. Tools return
 text for other MCP hosts. This stdio package runs locally; ChatGPT web needs a
 hosted MCP connection. Use one Cloud Guardian connection per client.
 
-To update, download and run `install.sh` again, then refresh the marketplace and
+The overview shows progress immediately and requests its saved data if the host
+does not supply an opening result. Successful overview responses are reused for
+up to 30 seconds within the same session and organization; **Refresh** bypasses
+that cache. Opening the overview does not start a provider scan.
+
+## Explore Vercel costs with your existing login
+
+Version 0.1.1 can read Vercel billing through a current local Vercel CLI. Install
+or update the [Vercel CLI](https://vercel.com/docs/cli), then run
+[`vercel login`](https://vercel.com/docs/cli/login) and `vercel whoami`.
+Cloud Guardian sign-in and a persistent connector are not required for this path.
+
+```text
+$cloud-guardian:cloud-costs
+Explore Vercel costs for team YOUR_TEAM_SLUG_OR_ID.
+Show billed and effective costs, the billing period, and project/service details.
+```
+
+The tool is `cg_explore_vercel_costs` with required `team` and optional paired
+`from_date` / `to_date` in `YYYY-MM-DD` format. Without dates it uses the current
+billing period. Date filters use America/Los_Angeles; report the returned period
+and keep provisional charges separate from resource monthly run-rate.
+See the [Vercel usage reference](https://vercel.com/docs/cli/usage).
+For a custom CLI location, set `VERCEL_CLI_BINARY` to its absolute executable
+path in the MCP host's environment. The native overview also offers an explicit
+**Explore Vercel costs** button; it never queries Vercel automatically on opening.
+
+Persistent Vercel onboarding through `cg_onboard_vercel` is prepared for the next
+Cloud Guardian backend deployment and is **not available on the production
+backend yet**. It will use an explicit organization, a `team_...` ID, and a
+dedicated API token. Do not copy the CLI's OAuth credentials into a backend
+connector. See [Vercel setup](skills/setup/references/vercel.md) for that separate
+workflow and the [billing API](https://vercel.com/docs/rest-api/billing/list-focus-billing-charges).
+
+To update, download and run `install.sh --version v0.1.1` again, then refresh the marketplace and
 reinstall the current plugin package:
 
 ```sh
 codex plugin marketplace upgrade cloud-guardian
 codex plugin add cloud-guardian@cloud-guardian
 ```
+
+Restart the MCP connection and start a new chat after updating. Updating the
+marketplace alone does not replace the locally installed `cg-mcp` executable.
 
 Read the [marketplace page](https://github.com/skunkworq/cloud-guardian-plugin#readme),
 [MCP onboarding](https://cloudguard.dev/docs/mcp/auth), and
