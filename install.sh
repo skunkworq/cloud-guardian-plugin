@@ -18,22 +18,23 @@ cleanup() {
 trap cleanup EXIT
 
 usage() {
-  cat <<'HELP'
-Cloud Guardian MCP installer ☁️🛡️
-
-Usage: install-mcp.sh [OPTIONS]
-
-  --version VERSION    Release version (default: latest; accepts 1.2.3 or v1.2.3)
-  --install-dir DIR    Binary directory (default: $HOME/.local/bin)
-  --repo OWNER/REPO    Public GitHub release repository
-  --register-codex     Register the standalone server with `codex mcp add`
-  --help              Show this help
-
-Environment: VERSION, INSTALL_DIR, CLOUD_GUARDIAN_MCP_RELEASE_REPO
-
-Install the Codex plugin separately to get its skills and marketplace entry.
-Use --register-codex for standalone MCP only; the plugin registers its own MCP.
-HELP
+  # Shell variables and command examples are literal help text.
+  # shellcheck disable=SC2016
+  printf '%s\n' \
+    'Cloud Guardian MCP installer ☁️🛡️' \
+    '' \
+    'Usage: install-mcp.sh [OPTIONS]' \
+    '' \
+    '  --version VERSION    Release version (default: latest; accepts 1.2.3 or v1.2.3)' \
+    '  --install-dir DIR    Binary directory (default: $HOME/.local/bin)' \
+    '  --repo OWNER/REPO    Public GitHub release repository' \
+    '  --register-codex     Register the standalone server with `codex mcp add`' \
+    '  --help              Show this help' \
+    '' \
+    'Environment: VERSION, INSTALL_DIR, CLOUD_GUARDIAN_MCP_RELEASE_REPO' \
+    '' \
+    'Install the Codex plugin separately to get its skills and marketplace entry.' \
+    'Use --register-codex for standalone MCP only; the plugin registers its own MCP.'
 }
 
 while [[ $# -gt 0 ]]; do
