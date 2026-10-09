@@ -4,12 +4,12 @@ Bring cloud cost reviews, Vercel billing, provider onboarding, and project conte
 This package contains the Cloud Guardian MCP connector, a `setup` skill, and a
 `cloud-costs` skill. Install the local runtime and the package together.
 
-Plugin package **0.1.3** uses MCP runtime **0.1.2**. Documentation and skills can
-update independently; the runtime install below remains pinned to `v0.1.2`.
+Plugin package **0.1.4** uses MCP runtime **0.1.5**. Documentation and skills can
+update independently; the runtime install below remains pinned to `v0.1.5`.
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/skunkworq/cloud-guardian-plugin/main/install.sh -o /tmp/install-cloud-guardian-mcp.sh
-bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.2
+bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.5
 codex plugin marketplace add skunkworq/cloud-guardian-plugin --ref main
 codex plugin add cloud-guardian@cloud-guardian
 codex plugin list --marketplace cloud-guardian
@@ -35,16 +35,26 @@ text for other MCP hosts. This stdio package runs locally; ChatGPT web needs a
 hosted MCP connection. Use one Cloud Guardian connection per client.
 
 The `cg_overview_app` sidebar/chat entrypoint opens immediately and loads complete
-saved data in the background. It reuses a recent session snapshot while updating
-and shows when that snapshot was loaded. Full reads are cached for 30 seconds;
+saved data in the background. With one available organization it opens that
+organization; with several it asks you to choose before loading projects or costs.
+Use the organization selector to switch within the signed-in account, or pass
+`org_id` explicitly to `cg_overview_app` or `cg_open_overview`. The viewer shows
+the account email. To use another account, run `cg_login` and verify the identity
+with `cg_whoami`; the selector cannot access another account's organizations.
+Viewer selection applies to that view only. Pass the intended `org_id` to other
+tools explicitly.
+
+The viewer reuses a recent snapshot for the same sign-in session and organization
+while updating and shows when it was loaded. Full reads are cached for 30 seconds;
 the app can retain a snapshot up to five minutes old during a background update.
-A new sign-in invalidates the cache; normal token renewal preserves it. Project
-search and pagination keep large inventories responsive. **Refresh** waits for a
-new saved-data read. Opening or refreshing does not start a provider scan.
+Organization caches are separate. A new sign-in invalidates the cache; normal
+token renewal preserves it. Project search and pagination keep large inventories
+responsive. **Refresh** reads fresh saved data for the organization currently in
+view. Opening or refreshing does not start a provider scan.
 
 ## Explore Vercel costs with your existing login
 
-MCP runtime 0.1.2 can read Vercel billing through a current local Vercel CLI. Install
+MCP runtime 0.1.5 can read Vercel billing through a current local Vercel CLI. Install
 or update the [Vercel CLI](https://vercel.com/docs/cli), then run
 [`vercel login`](https://vercel.com/docs/cli/login) and `vercel whoami`.
 Cloud Guardian sign-in and a persistent connector are not required for this path.
@@ -74,7 +84,7 @@ team-only scan separately when needed. Do not copy the CLI's OAuth credentials
 into a backend connector. See [Vercel setup](skills/setup/references/vercel.md) for that separate
 workflow and the [billing API](https://vercel.com/docs/rest-api/billing/list-focus-billing-charges).
 
-To update, download and run `install.sh --version v0.1.2` again, then refresh the marketplace and
+To update, download and run `install.sh --version v0.1.5` again, then refresh the marketplace and
 reinstall the current plugin package:
 
 ```sh

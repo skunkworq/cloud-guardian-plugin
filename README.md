@@ -5,7 +5,7 @@ billing, and project context into Codex. The plugin bundles the local `cg-mcp`
 server with two skills: `setup` for sign-in and onboarding, and `cloud-costs`
 for investigating spend with the right account, period, and project scope.
 
-Plugin package **0.1.3** uses MCP runtime **0.1.2**. Package documentation and
+Plugin package **0.1.4** uses MCP runtime **0.1.5**. Package documentation and
 skills can update independently of the binary; the commands below pin the
 runtime explicitly.
 
@@ -20,7 +20,7 @@ verifies the archive before extracting it and replacing an existing binary.
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/skunkworq/cloud-guardian-plugin/main/install.sh -o /tmp/install-cloud-guardian-mcp.sh
-bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.2
+bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.5
 codex plugin marketplace add skunkworq/cloud-guardian-plugin --ref main
 codex plugin add cloud-guardian@cloud-guardian
 codex plugin list --marketplace cloud-guardian
@@ -95,13 +95,20 @@ The native overview requires an MCP Apps host that supports the relevant
 return text for other hosts. This package uses a local stdio process in Codex
 desktop/CLI; a ChatGPT web installation needs a hosted MCP service.
 
-MCP runtime 0.1.2 opens the native app immediately through `cg_overview_app` and
+MCP runtime 0.1.5 opens the native app immediately through `cg_overview_app` and
 loads complete saved costs in the background. A recent session snapshot stays
 visible while updating, with its load time shown. Complete results are fresh
 for 30 seconds; the app can reuse a snapshot up to five minutes old while it
 requests fresh data. Snapshots are held only in the running MCP process and
 are isolated by sign-in session and organization. Normal token renewal keeps
 the cache; a new sign-in invalidates it.
+
+Runtime 0.1.5 adds organization selection to the overview and keeps saved cost
+reads scoped to the selected organization. Regional resources keep distinct
+identities, and cost details identify allocated billing, partial pricing, and
+unavailable estimates. Billing totals are net of provider credits; estimated
+credits apply only to the scanner estimate portion and are not subtracted from
+the displayed combined total.
 
 Project search and pagination keep large inventories responsive. **Refresh**
 waits for a new saved-data read and does not start a provider scan. The full
@@ -113,7 +120,7 @@ waits for that read to finish.
 
 ```sh
 # Update the binary, refresh the marketplace, and install the current package.
-bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.2
+bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.5
 codex plugin marketplace upgrade cloud-guardian
 codex plugin add cloud-guardian@cloud-guardian
 
@@ -134,12 +141,12 @@ that file separately if you want to clear the saved sign-in on this computer.
 For a host that does not support plugins, use the same binary directly:
 
 ```sh
-bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.2 --register-codex
+bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.5 --register-codex
 codex mcp get cloud-guardian
 ```
 
 Choose either this registration or the plugin, so the server loads once.
-The installer also supports `--version v0.1.2` and `--install-dir /absolute/path`;
+The installer also supports `--version v0.1.5` and `--install-dir /absolute/path`;
 run it with `--help` for the complete options. Windows cross-builds are available
 in the release assets for development. Browser sign-in currently works on
 macOS/Linux, which are also required by the plugin launcher and installer.
@@ -161,7 +168,7 @@ macOS/Linux, which are also required by the plugin launcher and installer.
   accepts an explicit `org_id`.
 - **No overview UI:** ask Codex for a text cost breakdown. UI support depends
   on your host's MCP Apps capabilities.
-- **Still waiting on an old overview:** install runtime 0.1.2, restart the MCP
+- **Still waiting on an old overview:** install runtime 0.1.5, restart the MCP
   connection, and open a new view. The new view automatically requests saved
   data when the host omits its opening result; a provider scan is not required.
 - **Costs are incomplete:** billing and scanner estimates are shown separately;
@@ -180,8 +187,8 @@ plugin repository. The MCP binary is distributed separately through the public
 Homebrew tap releases with tags `cg-mcp-v<version>`.
 
 Maintainers work in the private Cloud Guardian source repo. Plugin package and
-MCP runtime versions advance independently. Package 0.1.3 uses runtime 0.1.2;
-keep installation examples pinned to `--version v0.1.2` until a new runtime is
+MCP runtime versions advance independently. Package 0.1.4 uses runtime 0.1.5;
+keep installation examples pinned to `--version v0.1.5` until a new runtime is
 released and verified. Documentation or skill changes can bump the package
 without rebuilding or republishing the binary.
 
@@ -195,7 +202,7 @@ scripts/export-codex-plugin.sh /tmp/cloud-guardian-plugin-export
 
 Review the export inventory and commit the exported files to the public plugin
 repo. For a runtime release, publish its MCP assets with `SHA256SUMS` under the
-tag matching the runtime version, such as `cg-mcp-v0.1.2`. Bump both plugin
+tag matching the runtime version, such as `cg-mcp-v0.1.5`. Bump both plugin
 manifests together when package contents change and record the runtime pin in
 the installation guides. The dispatch-only
 MCP release workflow always produces build artifacts; optional cross-repository

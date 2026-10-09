@@ -1,6 +1,6 @@
 {
   "name": "cloud-guardian",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Explore cloud costs and Vercel billing in Codex, with provider onboarding, project mentions, and scoped remediation workflows.",
   "author": {
     "name": "Cloud Guardian",
@@ -8,7 +8,15 @@
   },
   "homepage": "https://github.com/skunkworq/cloud-guardian-plugin#readme",
   "repository": "https://github.com/skunkworq/cloud-guardian-plugin",
-  "keywords": ["cloud", "costs", "finops", "vercel", "onboarding", "mcp", "codex"],
+  "keywords": [
+    "cloud",
+    "costs",
+    "finops",
+    "vercel",
+    "onboarding",
+    "mcp",
+    "codex"
+  ],
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",
   "interface": {
@@ -17,7 +25,11 @@
     "longDescription": "Open the cloud cost overview, inspect saved infrastructure, and reference connected projects in chat. Explore Vercel billed and effective costs with your existing local Vercel CLI login, without a Cloud Guardian account connection. Bundled skills guide provider onboarding and evidence-based cost reviews. Cloud changes use scoped remediation tools.",
     "developerName": "Cloud Guardian",
     "category": "Productivity",
-    "capabilities": ["Interactive", "Read", "Write"],
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
     "websiteURL": "https://github.com/skunkworq/cloud-guardian-plugin#readme",
     "logo": "./icons/logo.svg",
     "logoDark": "./icons/logo-dark.svg",

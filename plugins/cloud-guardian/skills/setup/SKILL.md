@@ -42,6 +42,15 @@ persistent connector or request a provider scan just to review CLI billing.
 3. Inspect `cg_list_connectors` and `cg_list_org_projects` using the selected
    `org_id`. Reuse matching healthy connectors instead of creating duplicates.
 
+The native overview automatically opens a sole organization and presents a
+chooser when the signed-in account has several. Pass an explicit `org_id` to
+`cg_overview_app` or `cg_open_overview` to open a requested organization directly.
+Use the viewer's organization selector to switch between that account's
+organizations. Check its displayed account email; to switch accounts, call
+`cg_login` and verify the new identity with `cg_whoami`. Viewer selection stays
+within the view and does not change other tools' default organization. Pass the
+intended `org_id` explicitly to every scoped tool that supports it.
+
 Authentication uses the executable's loopback browser callback and stores its
 session at `~/.config/cloud-guardian/auth.json`. Never print, upload, or commit
 this file or provider secrets. For this stdio connection, use `cg_login` rather
@@ -96,13 +105,16 @@ its first cost observations arrive; identify that state rather than reporting
 zero spend.
 
 The native entrypoint `cg_overview_app` opens immediately and reads complete data
-through `cg_open_overview` in the background. Full results are fresh for 30 seconds
-per sign-in session and organization. The app can show a snapshot up to five
-minutes old while it refreshes; check its displayed load time. Normal token
-renewal preserves the cache and a new sign-in clears it. Set `refresh: true` on
-`cg_open_overview` when the user requests fresh saved data; this does not trigger
-a provider scan. If the tool or host fails, report the actionable error and use
-text tools rather than leaving the user waiting indefinitely.
+through `cg_open_overview` in the background after an organization is selected.
+Full results are fresh for 30 seconds per sign-in session and organization;
+snapshots from another organization are not used for the selected view. The app
+can show a snapshot up to five minutes old while it refreshes; check its displayed
+load time. Normal token renewal preserves the cache and a new sign-in clears it.
+The viewer's **Refresh** keeps the current organization. For fresh saved data in
+a tool call, pass that organization's `org_id` and `refresh: true` to
+`cg_open_overview`; this does not trigger a provider scan. If the tool or host
+fails, report the actionable error and use text tools rather than leaving the
+user waiting indefinitely.
 
 In a compatible Codex desktop host, the user can open **Cloud cost overview**
 from the sidebar or a chat tab and mention a connected project with `@`.
