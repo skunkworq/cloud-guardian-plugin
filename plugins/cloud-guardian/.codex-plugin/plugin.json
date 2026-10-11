@@ -1,6 +1,6 @@
 {
   "name": "cloud-guardian",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Explore cloud costs and Vercel billing in Codex, with provider onboarding, project mentions, and scoped remediation workflows.",
   "author": {
     "name": "Cloud Guardian",

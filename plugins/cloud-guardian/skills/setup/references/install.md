@@ -1,8 +1,8 @@
 # Installation and connection
 
-Plugin package 0.1.4 uses MCP runtime 0.1.5. Package documentation and skills
+Plugin package 0.1.5 uses MCP runtime 0.1.6. Package documentation and skills
 update independently of the binary; keep runtime installation pinned to
-`--version v0.1.5`.
+`--version v0.1.6`.
 
 The package bundles skills and a stdio MCP definition. Its launcher discovers
 `cg-mcp` on `PATH` or at `~/.local/bin/cg-mcp`; it connects to
@@ -20,7 +20,7 @@ only after validation succeeds:
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/skunkworq/cloud-guardian-plugin/main/install.sh -o /tmp/install-cloud-guardian-mcp.sh
-bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.5
+bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.6
 codex plugin marketplace add skunkworq/cloud-guardian-plugin --ref main
 codex plugin add cloud-guardian@cloud-guardian
 codex plugin list --marketplace cloud-guardian
@@ -44,7 +44,7 @@ codex plugin marketplace upgrade cloud-guardian
 codex plugin add cloud-guardian@cloud-guardian
 ```
 
-Update `cg-mcp` separately using the repository's `install.sh --version v0.1.5`; marketplace refresh
+Update `cg-mcp` separately using the repository's `install.sh --version v0.1.6`; marketplace refresh
 does not replace a previously installed executable. If an older Codex CLI has
 no `plugin` subcommand, use a supported Codex release or register the executable
 as a bare MCP server with the installer's `--register-codex` option. That fallback

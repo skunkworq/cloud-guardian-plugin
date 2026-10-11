@@ -96,6 +96,27 @@ fails, or expires. If the user must complete a browser step, return its exact
 link and describe that step. Report the server's failure detail and resume with
 the existing session or connector when possible.
 
+## Connect GCP billing export
+
+MCP runtime 0.1.6 adds `cg_onboard_gcp_billing`, which runs the bundled local
+billing setup helper and returns a session ID and organization progress link.
+Install Node.js 20+, npm, gcloud, and Google Chrome on the machine running the
+MCP server. Sign in to Cloud Guardian as an administrator of the intended
+organization, and reuse the existing billing export destination when present.
+
+Call `cg_onboard_gcp_billing` with explicit `org_id`, `connector_id`,
+`billing_account_id`, `bq_project_id`, `dataset_id`, `location`, and
+`gcloud_account`. The Google administrator completes sign-in and MFA locally;
+keep Google tokens and browser cookies out of chat. Setup prepares dataset and
+connector access and configures Standard usage export in Google Console.
+
+Poll `cg_gcp_billing_onboarding_status` with `org_id` and the returned
+`session_id`, or open the organization progress link. A failed or stalled runner
+needs attention. Runner step `waiting_for_data` with connection status
+`pending_data` means setup is waiting for Google billing rows; connection status
+`active` means the billing query is verified. Scheduled scans continue checking
+for data.
+
 ## Verify and hand over
 
 After onboarding, use `cg_test_connector`, then confirm the linked projects with
