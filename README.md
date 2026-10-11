@@ -5,7 +5,7 @@ billing, and project context into Codex. The plugin bundles the local `cg-mcp`
 server with two skills: `setup` for sign-in and onboarding, and `cloud-costs`
 for investigating spend with the right account, period, and project scope.
 
-Plugin package **0.1.4** uses MCP runtime **0.1.5**. Package documentation and
+Plugin package **0.1.5** uses MCP runtime **0.1.6**. Package documentation and
 skills can update independently of the binary; the commands below pin the
 runtime explicitly.
 
@@ -20,7 +20,7 @@ verifies the archive before extracting it and replacing an existing binary.
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/skunkworq/cloud-guardian-plugin/main/install.sh -o /tmp/install-cloud-guardian-mcp.sh
-bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.5
+bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.6
 codex plugin marketplace add skunkworq/cloud-guardian-plugin --ref main
 codex plugin add cloud-guardian@cloud-guardian
 codex plugin list --marketplace cloud-guardian
@@ -35,6 +35,18 @@ You can explicitly invoke `$cloud-guardian:setup` or
 in Codex CLI to find **🛡️☁️ Cloud Guardian** under the **Cloud Guardian** marketplace.
 This is a GitHub repository marketplace; it is separate from OpenAI's public
 plugin directory review process.
+
+## GCP billing export setup
+
+Runtime 0.1.6 adds `cg_onboard_gcp_billing` for local billing export setup with
+live progress. It requires Node.js 20+, npm, gcloud, and Chrome. Supply the
+organization, connector, billing account, existing destination project/dataset,
+location, and Google administrator account explicitly; complete Google sign-in
+and MFA locally. Reuse an existing export destination. Poll
+`cg_gcp_billing_onboarding_status` with the organization and returned session ID,
+or open its progress link. The runner step `waiting_for_data` with connection
+status `pending_data` means setup is waiting for Google billing rows; connection
+status `active` means the billing query is verified.
 
 ## First run: explore Vercel billing
 
@@ -120,7 +132,7 @@ waits for that read to finish.
 
 ```sh
 # Update the binary, refresh the marketplace, and install the current package.
-bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.5
+bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.6
 codex plugin marketplace upgrade cloud-guardian
 codex plugin add cloud-guardian@cloud-guardian
 
@@ -141,12 +153,12 @@ that file separately if you want to clear the saved sign-in on this computer.
 For a host that does not support plugins, use the same binary directly:
 
 ```sh
-bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.5 --register-codex
+bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.6 --register-codex
 codex mcp get cloud-guardian
 ```
 
 Choose either this registration or the plugin, so the server loads once.
-The installer also supports `--version v0.1.5` and `--install-dir /absolute/path`;
+The installer also supports `--version v0.1.6` and `--install-dir /absolute/path`;
 run it with `--help` for the complete options. Windows cross-builds are available
 in the release assets for development. Browser sign-in currently works on
 macOS/Linux, which are also required by the plugin launcher and installer.
@@ -168,7 +180,7 @@ macOS/Linux, which are also required by the plugin launcher and installer.
   accepts an explicit `org_id`.
 - **No overview UI:** ask Codex for a text cost breakdown. UI support depends
   on your host's MCP Apps capabilities.
-- **Still waiting on an old overview:** install runtime 0.1.5, restart the MCP
+- **Still waiting on an old overview:** install runtime 0.1.6, restart the MCP
   connection, and open a new view. The new view automatically requests saved
   data when the host omits its opening result; a provider scan is not required.
 - **Costs are incomplete:** billing and scanner estimates are shown separately;
@@ -187,8 +199,8 @@ plugin repository. The MCP binary is distributed separately through the public
 Homebrew tap releases with tags `cg-mcp-v<version>`.
 
 Maintainers work in the private Cloud Guardian source repo. Plugin package and
-MCP runtime versions advance independently. Package 0.1.4 uses runtime 0.1.5;
-keep installation examples pinned to `--version v0.1.5` until a new runtime is
+MCP runtime versions advance independently. Package 0.1.5 uses runtime 0.1.6;
+keep installation examples pinned to `--version v0.1.6` until a new runtime is
 released and verified. Documentation or skill changes can bump the package
 without rebuilding or republishing the binary.
 
@@ -202,7 +214,7 @@ scripts/export-codex-plugin.sh /tmp/cloud-guardian-plugin-export
 
 Review the export inventory and commit the exported files to the public plugin
 repo. For a runtime release, publish its MCP assets with `SHA256SUMS` under the
-tag matching the runtime version, such as `cg-mcp-v0.1.5`. Bump both plugin
+tag matching the runtime version, such as `cg-mcp-v0.1.6`. Bump both plugin
 manifests together when package contents change and record the runtime pin in
 the installation guides. The dispatch-only
 MCP release workflow always produces build artifacts; optional cross-repository

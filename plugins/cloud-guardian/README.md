@@ -4,12 +4,12 @@ Bring cloud cost reviews, Vercel billing, provider onboarding, and project conte
 This package contains the Cloud Guardian MCP connector, a `setup` skill, and a
 `cloud-costs` skill. Install the local runtime and the package together.
 
-Plugin package **0.1.4** uses MCP runtime **0.1.5**. Documentation and skills can
-update independently; the runtime install below remains pinned to `v0.1.5`.
+Plugin package **0.1.5** uses MCP runtime **0.1.6**. Documentation and skills can
+update independently; the runtime install below remains pinned to `v0.1.6`.
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/skunkworq/cloud-guardian-plugin/main/install.sh -o /tmp/install-cloud-guardian-mcp.sh
-bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.5
+bash /tmp/install-cloud-guardian-mcp.sh --version v0.1.6
 codex plugin marketplace add skunkworq/cloud-guardian-plugin --ref main
 codex plugin add cloud-guardian@cloud-guardian
 codex plugin list --marketplace cloud-guardian
@@ -52,6 +52,18 @@ token renewal preserves it. Project search and pagination keep large inventories
 responsive. **Refresh** reads fresh saved data for the organization currently in
 view. Opening or refreshing does not start a provider scan.
 
+## GCP billing export setup
+
+Runtime 0.1.6 adds `cg_onboard_gcp_billing` for local billing export setup with
+live progress. It requires Node.js 20+, npm, gcloud, and Chrome. Supply the
+organization, connector, billing account, existing destination project/dataset,
+location, and Google administrator account explicitly; complete Google sign-in
+and MFA locally. Reuse an existing export destination. Poll
+`cg_gcp_billing_onboarding_status` with the organization and returned session ID,
+or open its progress link. The runner step `waiting_for_data` with connection
+status `pending_data` means setup is waiting for Google billing rows; connection
+status `active` means the billing query is verified.
+
 ## Explore Vercel costs with your existing login
 
 MCP runtime 0.1.5 can read Vercel billing through a current local Vercel CLI. Install
@@ -84,7 +96,7 @@ team-only scan separately when needed. Do not copy the CLI's OAuth credentials
 into a backend connector. See [Vercel setup](skills/setup/references/vercel.md) for that separate
 workflow and the [billing API](https://vercel.com/docs/rest-api/billing/list-focus-billing-charges).
 
-To update, download and run `install.sh --version v0.1.5` again, then refresh the marketplace and
+To update, download and run `install.sh --version v0.1.6` again, then refresh the marketplace and
 reinstall the current plugin package:
 
 ```sh
